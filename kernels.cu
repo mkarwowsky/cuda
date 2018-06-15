@@ -10,7 +10,7 @@ void blur(unsigned char* input_image, unsigned char* output_image, int width, in
     const unsigned int offset = blockIdx.x*blockDim.x + threadIdx.x;// numer pixela
     int x = offset % width;
     int y = offset/width;
-    int fsize = 16; // Filter size
+    int fsize = 32; // Filter size
 
     if(offset < width*height) {
 
@@ -45,7 +45,7 @@ void filter (unsigned char* input_image, unsigned char* output_image, int width,
  
     getError(cudaMalloc( (void**) &dev_output, width*height*3*sizeof(unsigned char)));
 
-    dim3 blockDims(512,1,1);
+    dim3 blockDims(256,1,1);
     dim3 gridDims((unsigned int) ceil((double)(width*height*3/blockDims.x)), 1, 1 );
 
     blur<<<gridDims, blockDims>>>(dev_input, dev_output, width, height); 
