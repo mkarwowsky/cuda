@@ -29,7 +29,6 @@ void blur(unsigned char* input_image, unsigned char* output_image, int width, in
                 }
             }
         }
-        __syncthreads();
         output_image[offset*3] = output_red/hits;
         output_image[offset*3+1] = output_green/hits;
         output_image[offset*3+2] = output_blue/hits;
