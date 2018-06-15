@@ -44,13 +44,39 @@ void filter (unsigned char* input_image, unsigned char* output_image, int width,
  
     getError(cudaMalloc( (void**) &dev_output, width*height*3*sizeof(unsigned char)));
 
-    
-    
-    dim3 threadsPerBlock(16, 16);
-    dim3 numBlocks(N / threadsPerBlock.x, N / threadsPerBlock.y);
+    //dim3 blockDims(512,1,1);
+    //dim3 gridDims((unsigned int) ceil((double)(width*height*3/blockDims.x)), 1, 1 );
 
-    blur<<<numBlocks, threadsPerBlock>>>(dev_input, dev_output, width, height); 
+    //--- run kernel ---
+    dim3 numThreads = dim3(BLOCKSIZE_X, BLOCKSIZE_Y, 1);
+    dim3 numBlocks = dim3(width / numThreads.x, height / numThreads.y);
 
+    // First run the warmup kernel (which we'll use to get the GPU in the correct max power state
+    blur<<<numBlocks, numThreads>>>(dev_input, dev_output, width, height); 
+    cudaDeviceSynchronize();
+
+    //--- Allocate CUDA events that we'll use for timing ---
+    cudaEvent_t start, stop;
+    checkCudaErrors(cudaEventCreate(&start));
+    checkCudaErrors(cudaEventCreate(&stop));
+
+    printf("Launching CUDA Kernel\n");
+
+    //--- Record the start event ---
+    checkCudaErrors(cudaEventRecord(start, NULL));
+
+    blur<<<numBlocks, numThreads>>>(dev_input, dev_output, width, height);
+    //--- Record the stop event ---
+    checkCudaErrors(cudaEventRecord(stop, NULL));
+
+    //--- Wait for the stop event to complete ---
+    checkCudaErrors(cudaEventSynchronize(stop));
+
+    //--- Check to make sure the kernel didn't fail ---
+    getLastCudaError("Kernel execution failed");
+
+    float msecTotal = 0.0f;
+    checkCudaErrors(cudaEventElapsedTime(&msecTotal, start, stop));
 
     getError(cudaMemcpy(output_image, dev_output, width*height*3*sizeof(unsigned char), cudaMemcpyDeviceToHost ));
 
