@@ -44,10 +44,12 @@ void filter (unsigned char* input_image, unsigned char* output_image, int width,
  
     getError(cudaMalloc( (void**) &dev_output, width*height*3*sizeof(unsigned char)));
 
-    dim3 blockDims(512,1,1);
-    dim3 gridDims((unsigned int) ceil((double)(width*height*3/blockDims.x)), 1, 1 );
+    
+    
+    dim3 threadsPerBlock(16, 16);
+    dim3 numBlocks(N / threadsPerBlock.x, N / threadsPerBlock.y);
 
-    blur<<<gridDims, blockDims>>>(dev_input, dev_output, width, height); 
+    blur<<<numBlocks, threadsPerBlock>>>(dev_input, dev_output, width, height); 
 
 
     getError(cudaMemcpy(output_image, dev_output, width*height*3*sizeof(unsigned char), cudaMemcpyDeviceToHost ));
