@@ -10,7 +10,8 @@ void blur(unsigned char* input_image, unsigned char* output_image, int width, in
     const unsigned int offset = blockIdx.x*blockDim.x + threadIdx.x;// numer pixela
     int x = offset % width;
     int y = offset/width;
-    int fsize = 5; // Filter size
+    int fsize = 16; // Filter size
+    
     if(offset < width*height) {
 
         float output_red = 0;
@@ -44,39 +45,11 @@ void filter (unsigned char* input_image, unsigned char* output_image, int width,
  
     getError(cudaMalloc( (void**) &dev_output, width*height*3*sizeof(unsigned char)));
 
-    //dim3 blockDims(512,1,1);
-    //dim3 gridDims((unsigned int) ceil((double)(width*height*3/blockDims.x)), 1, 1 );
+    dim3 blockDims(512,1,1);
+    dim3 gridDims((unsigned int) ceil((double)(width*height*3/blockDims.x)), 1, 1 );
 
-    //--- run kernel ---
-    dim3 numThreads = dim3(BLOCKSIZE_X, BLOCKSIZE_Y, 1);
-    dim3 numBlocks = dim3(width / numThreads.x, height / numThreads.y);
+    blur<<<gridDims, blockDims>>>(dev_input, dev_output, width, height); 
 
-    // First run the warmup kernel (which we'll use to get the GPU in the correct max power state
-    blur<<<numBlocks, numThreads>>>(dev_input, dev_output, width, height); 
-    cudaDeviceSynchronize();
-
-    //--- Allocate CUDA events that we'll use for timing ---
-    cudaEvent_t start, stop;
-    checkCudaErrors(cudaEventCreate(&start));
-    checkCudaErrors(cudaEventCreate(&stop));
-
-    printf("Launching CUDA Kernel\n");
-
-    //--- Record the start event ---
-    checkCudaErrors(cudaEventRecord(start, NULL));
-
-    blur<<<numBlocks, numThreads>>>(dev_input, dev_output, width, height);
-    //--- Record the stop event ---
-    checkCudaErrors(cudaEventRecord(stop, NULL));
-
-    //--- Wait for the stop event to complete ---
-    checkCudaErrors(cudaEventSynchronize(stop));
-
-    //--- Check to make sure the kernel didn't fail ---
-    getLastCudaError("Kernel execution failed");
-
-    float msecTotal = 0.0f;
-    checkCudaErrors(cudaEventElapsedTime(&msecTotal, start, stop));
 
     getError(cudaMemcpy(output_image, dev_output, width*height*3*sizeof(unsigned char), cudaMemcpyDeviceToHost ));
 
