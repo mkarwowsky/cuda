@@ -52,14 +52,15 @@ int main(int argc, char** argv) {
     
     // Output the data
     error = lodepng::encode(output_file, out_image, width, height);
-
+    
     //if there's an error, display it
     if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
 
     delete[] input_image;
     delete[] output_image;
-    return 0;
     }
+    return 0;
+    
 }
 
 
