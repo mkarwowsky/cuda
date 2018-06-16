@@ -8,7 +8,7 @@
 
 
 int main(int argc, char **argv) {
-    for (int i = 0; i < argc; ++i)
+    for (int j = 0; j < argc; ++j)
     {
     /*if(argc != 3) {
         std::cout << "Run with input and output image filenames." << std::endl;
@@ -16,8 +16,8 @@ int main(int argc, char **argv) {
     }*/
 
     // Read the arguments
-    const char* input_file = argv[i+1];
-    const char* output_file = argv[i+2];
+    const char* input_file = argv[j];
+    const char* output_file = argv[j+1];
 
     std::vector<unsigned char> in_image;
     unsigned int width, height;
