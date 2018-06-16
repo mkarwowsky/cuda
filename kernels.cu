@@ -51,10 +51,10 @@ void filter (unsigned char* input_image, unsigned char* output_image, int width,
     blur<<<gridDims, blockDims>>>(dev_input, dev_output, width, height); 
 
 
-    //getError(cudaMemcpy(output_image, dev_output, width*height*3*sizeof(unsigned char), cudaMemcpyDeviceToHost ));
+    getError(cudaMemcpy(output_image, dev_output, width*height*3*sizeof(unsigned char), cudaMemcpyDeviceToHost ));
 
     getError(cudaFree(dev_input));
-    //getError(cudaFree(dev_output));
+    getError(cudaFree(dev_output));
 
 }
 
