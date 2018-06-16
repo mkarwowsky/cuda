@@ -7,15 +7,21 @@
 #include <functional>
 
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     if(argc != 3) {
         std::cout << "Run with input and output image filenames." << std::endl;
         return 0;
     }
 
     // Read the arguments
-    const char* input_file = argv[1];
-    const char* output_file = argv[2];
+    for (int i = 0; i < argc; ++i)
+    {
+        const char* input_file = argv[i];
+    }
+
+    for (int i = 0; i < argc; ++i){
+    const char* output_file = argv[i];
+    }
 
     std::vector<unsigned char> in_image;
     unsigned int width, height;
