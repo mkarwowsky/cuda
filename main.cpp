@@ -58,8 +58,8 @@ int main(int argc, char** argv) {
 
     delete[] input_image;
     delete[] output_image;
-    }
     return 0;
+    }
 }
 
 
