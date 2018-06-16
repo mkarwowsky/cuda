@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     // Read the arguments
     const char* input_file = argv[j];
     const char* output_file = argv[j+1];
-
+    j++;
     std::vector<unsigned char> in_image;
     unsigned int width, height;
 
