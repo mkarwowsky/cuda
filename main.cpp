@@ -8,7 +8,7 @@
 
 
 int main(int argc, char **argv) {
-    for (int i = 0; i < argc; 2+i)
+    for (int i = 0; i < argc; ++i)
     {
     /*if(argc != 3) {
         std::cout << "Run with input and output image filenames." << std::endl;
