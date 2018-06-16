@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
         return 0;
     }*/
 
-    for(int j = 0; j < argc; ++j){
+    for(int j = 1; j < argc; ++j){
 
     // Read the arguments
     const char* input_file = argv[1+j];
