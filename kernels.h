@@ -9,7 +9,7 @@ struct preparedImage
     unsigned char *output_image;
     unsigned int width; 
     unsigned int height;
-    int size;
+    unsigned char size;
 };
 
 struct ParametersToFilter
