@@ -1,3 +1,5 @@
+ #include <cstdlib>
+
 #ifndef KERNELS_H_
 #define KERNELS_H_
 
