@@ -17,7 +17,7 @@ preparedImage loadImage(char name_file){
 
     // Load the data
     printf("Ładowanie danych \n");
-    unsigned error = lodepng::decode(in_image, width, height, input_file);
+    unsigned error = lodepng::decode(in_image, width, height, name_file);
     if(error) std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
     
     // Prepare the data
