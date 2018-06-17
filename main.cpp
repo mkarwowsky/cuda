@@ -6,6 +6,36 @@
 #include "kernels.h"
 #include <functional>
 
+struct preparedImage {
+    unsigned char* input_image;
+    unsigned char* output_image;
+}
+
+preparedImage loadImage(char name_file){
+    printf("Czytanie argumentów: %s %s \n", argv[1+j], argv[2+j]);
+    std::vector<unsigned char> in_image;
+    unsigned int width, height;
+
+    // Load the data
+    printf("Ładowanie danych \n");
+    unsigned error = lodepng::decode(in_image, width, height, input_file);
+    if(error) std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+    
+    // Prepare the data
+    printf("Przygotowanie danych \n");
+    preparedImage image;
+    image.input_image = new unsigned char[(in_image.size()*3)/4];
+    image.output_image = new unsigned char[(in_image.size()*3)/4];
+    int where = 0;
+    for(int i = 0; i < in_image.size(); ++i) {
+       if((i+1) % 4 != 0) {
+           image.input_image[where] = in_image.at(i);
+           image.output_image[where] = 255;
+           where++;
+       }
+    }
+    return image;
+}
 
 int main(int argc, char** argv) {
     /*if(argc != 3) {
@@ -18,7 +48,10 @@ int main(int argc, char** argv) {
     // Read the arguments
     const char* input_file = argv[1+j];
     const char* output_file = argv[2+j];
-    printf("Czytanie argumentów: %s %s \n", argv[1+j], argv[2+j]);
+
+    unsigned char* input_image, unsigned char* output_image
+    preparedImage loadedImage = loadImage(input_file);
+/*    printf("Czytanie argumentów: %s %s \n", argv[1+j], argv[2+j]);
     std::vector<unsigned char> in_image;
     unsigned int width, height;
 
@@ -39,16 +72,16 @@ int main(int argc, char** argv) {
            where++;
        }
     }
-
+*/
     // Run the filter on it
     printf("Filter uruchom \n");
-    filter(input_image, output_image, width, height); 
+    filter(loadedImage.input_image, loadedImage.output_image, width, height); 
 
     // Prepare data for output
     printf("Dane na output \n");
     std::vector<unsigned char> out_image;
     for(int i = 0; i < in_image.size(); ++i) {
-        out_image.push_back(output_image[i]);
+        out_image.push_back(loadedImage.output_image[i]);
         if((i+1) % 3 == 0) {
             out_image.push_back(255);
         }
