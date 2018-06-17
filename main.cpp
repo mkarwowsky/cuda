@@ -6,113 +6,91 @@
 #include "kernels.h"
 #include <functional>
 
-struct preparedImage {
-    unsigned char* input_image;
-    unsigned char* output_image;
-    unsigned int width, height;
-    std::vector<unsigned char> in_image;;
-};
-
-preparedImage loadImage(const char* name_file){
+preparedImage loadImage(const char *name_file)
+{
     preparedImage image;
     // Load the data
     printf("Ładowanie danych \n");
     unsigned error = lodepng::decode(image.in_image, image.width, image.height, name_file);
-    if(error) std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
-    
+    if (error)
+        std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+
     // Prepare the data
     printf("Przygotowanie danych \n");
-    image.input_image = new unsigned char[(image.in_image.size()*3)/4];
-    image.output_image = new unsigned char[(image.in_image.size()*3)/4];
+    image.input_image = new unsigned char[(image.in_image.size() * 3) / 4];
+    image.output_image = new unsigned char[(image.in_image.size() * 3) / 4];
     int where = 0;
-    for(int i = 0; i < image.in_image.size(); ++i) {
-       if((i+1) % 4 != 0) {
-           image.input_image[where] = image.in_image.at(i);
-           image.output_image[where] = 255;
-           where++;
-       }
+    for (int i = 0; i < image.in_image.size(); ++i)
+    {
+        if ((i + 1) % 4 != 0)
+        {
+            image.input_image[where] = image.in_image.at(i);
+            image.output_image[where] = 255;
+            where++;
+        }
     }
     return image;
 }
 
+int main(int argc, char **argv)
+{
+    // Co drugi wczytuję.
+    preparedImage *images = new preparedImage[argc / 2];           // obrazki
+    ParametersToFilter *params = new ParametersToFilter[argc / 2]; // parametry do filtrów
+    pthread_t *threads = new pthread_t[argc / 2];                  // uchwyty na wątki
 
+    for (int j = 0; j < argc; j += 2)
+    {
 
-int main(int argc, char** argv) {
-    /*if(argc != 3) {
-        std::cout << "Run with input and output image filenames." << std::endl;
-        return 0;
-    }*/
-    char **global_inputs = new char *[argc/2]; // Co drugi wczytuję.
-    char **global_outputs = new char *[argc/2];
+        // Read the arguments
+        printf("Czytanie argumentów: %s %s \n", argv[1 + j], argv[2 + j]);
+        const char *input_file = argv[1 + j];
+        const char *output_file = argv[2 + j];
 
-    for(int j = 0; j < argc; j+=2){
+        images[j / 2] = loadImage(input_file);
+        params[j / 2].images = images;
+        params[j / 2].img_id = j / 2;
 
-    // Read the arguments
-    printf("Czytanie argumentów: %s %s \n", argv[1+j], argv[2+j]);
-    const char* input_file = argv[1+j];
-    const char* output_file = argv[2+j];
-
-    preparedImage loadedImage;
-    loadedImage = loadImage(input_file);
-    global_inputs[j/2] = loadedImage.input_image;
-    global_outputs[j/2] = loadedImage.output_image;
-
-/*    printf("Czytanie argumentów: %s %s \n", argv[1+j], argv[2+j]);
-    std::vector<unsigned char> in_image;
-    unsigned int width, height;
-
-    // Load the data
-    printf("Ładowanie danych \n");
-    unsigned error = lodepng::decode(in_image, width, height, input_file);
-    if(error) std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
-    
-    // Prepare the data
-    printf("Przygotowanie danych \n");
-    unsigned char* input_image = new unsigned char[(in_image.size()*3)/4];
-    unsigned char* output_image = new unsigned char[(in_image.size()*3)/4];
-    int where = 0;
-    for(int i = 0; i < in_image.size(); ++i) {
-       if((i+1) % 4 != 0) {
-           input_image[where] = in_image.at(i);
-           output_image[where] = 255;
-           where++;
-       }
-    }
-*/
-    // Run the filter on it
-    printf("Filter uruchom \n");
-    unsigned char* dev_input;
-    unsigned char* dev_output;
-
-    filter(loadedImage.input_image, loadedImage.output_image, loadedImage.width, loadedImage.height, dev_input, dev_output);
-    std::cout << "TEST TEST TEST" << std::endl;
-
-    //getOutputFilter(loadedImage.output_image, dev_input, dev_output, loadedImage.width, loadedImage.height);
-    //filter(loadedImage.input_image, loadedImage.output_image, loadedImage.width, loadedImage.height); 
-
-    // Prepare data for output
-    printf("Dane na output \n");
-    std::vector<unsigned char> out_image;
-    for(int i = 0; i < loadedImage.in_image.size(); ++i) {
-        out_image.push_back(loadedImage.output_image[i]);
-        if((i+1) % 3 == 0) {
-            out_image.push_back(255);
+        // Run the filter on it
+        printf("Filter %d uruchom \n", j / 2);
+        if (pthread_create(&threads[j/2], NULL, filter, &(params[j/2])) {
+            fprintf(stderr, "Error creating threadn");
+            return 1;
         }
     }
-    
-    // Output the data
-    printf("Output data \n");
-    unsigned error = lodepng::encode(output_file, out_image, loadedImage.width, loadedImage.height);
-    
-    //if there's an error, display it
-    if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
+    printf("Joining threads \n");
+    for (int j = 0; j < argc; j += 2)
+    {
+        if (pthread_join(threads[j / 2], NULL))
+        {
+            fprintf(stderr, "Error joining threadn");
+            return 2;
+        }
 
-    delete[] loadedImage.input_image;
-    delete[] loadedImage.output_image;
+        printf("Dane na output \n");
+        std::vector<unsigned char> out_image;
+        for (int i = 0; i < images[j / 2].in_image.size(); ++i)
+        {
+            out_image.push_back(images[j / 2].output_image[i]);
+            if ((i + 1) % 3 == 0)
+            {
+                out_image.push_back(255);
+            }
+        }
+
+        // Output the data
+        printf("Output data \n");
+        unsigned error = lodepng::encode(output_file, out_image, images[j / 2].width, images[j / 2].height);
+
+        //if there's an error, display it
+        if (error)
+            std::cout << "encoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+
+        delete[] images[j / 2].input_image;
+        delete[] images[j / 2].output_image;
     }
+    delete[] images;
+    delete[] params;
+    delete[] threads;
     return 0;
-    
 }
-
-
-

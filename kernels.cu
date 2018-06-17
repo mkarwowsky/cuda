@@ -35,8 +35,14 @@ void blur(unsigned char* input_image, unsigned char* output_image, int width, in
         }
 }
 
-
-void filter (unsigned char* &input_image, unsigned char* &output_image, int width, int height, unsigned char* &dev_input, unsigned char* &dev_output ) {
+void *filter(void *arg){
+    ParametersToFilter params = *(ParametersToFilter *)(arg);
+    unsigned char*  input_image = params.images[params.img_id].input_image;
+    unsigned char*  output_image = params.images[params.img_id].output_image;
+    int width = params.images[params.img_id].width;
+    int height = params.images[params.img_id].height;
+    unsigned char* dev_input;
+    unsigned char* dev_output;
     getError(cudaMalloc( (void**) &dev_input, width*height*3*sizeof(unsigned char)));
     getError(cudaMemcpy( dev_input, input_image, width*height*3*sizeof(unsigned char), cudaMemcpyHostToDevice ));
  
@@ -51,13 +57,6 @@ void filter (unsigned char* &input_image, unsigned char* &output_image, int widt
 
     getError(cudaFree(dev_input));
     getError(cudaFree(dev_output));
+    return NULL;
 }
 
-/*void getOutputFilter(unsigned char* &output_image, unsigned char* &dev_input, unsigned char* &dev_output, int width, int height)
-{
-    getError(cudaMemcpy(output_image, dev_output, width*height*3*sizeof(unsigned char), cudaMemcpyDeviceToHost ));
-
-    getError(cudaFree(dev_input));
-    getError(cudaFree(dev_output));
-}
-*/
