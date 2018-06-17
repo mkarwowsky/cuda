@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 
     for (int j = 0; j < argc; j += 2)
     {
-
+        printf("Argc = %d", argc);
         // Read the arguments
         printf("Czytanie argumentów: %s %s \n", argv[1 + j], argv[2 + j]);
         const char *input_file = argv[1 + j];
