@@ -21,6 +21,7 @@ preparedImage loadImage(const char *name_file)
     printf("Przygotowanie danych \n");
     image.input_image = new unsigned char[(in_image.size() * 3) / 4];
     image.output_image = new unsigned char[(in_image.size() * 3) / 4];
+    image.size = in_image.size();
     int where = 0;
     for (int i = 0; i < in_image.size(); ++i)
     {
