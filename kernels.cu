@@ -36,8 +36,7 @@ void blur(unsigned char* input_image, unsigned char* output_image, int width, in
 }
 
 
-void filter (unsigned char* input_image, unsigned char* output_image, int width, int height, unsigned char* dev_input, unsigned char* dev_output ) {
-
+void filter (unsigned char* input_image, unsigned char* &output_image, int width, int height, unsigned char* &dev_input, unsigned char* &dev_output ) {
     getError(cudaMalloc( (void**) &dev_input, width*height*3*sizeof(unsigned char)));
     getError(cudaMemcpy( dev_input, input_image, width*height*3*sizeof(unsigned char), cudaMemcpyHostToDevice ));
  
@@ -47,13 +46,10 @@ void filter (unsigned char* input_image, unsigned char* output_image, int width,
     dim3 gridDims((unsigned int) ceil((double)(width*height*3/blockDims.x)), 1, 1 );
 
     blur<<<gridDims, blockDims>>>(dev_input, dev_output, width, height); 
-
-
 }
 
-void getOutputFilter(unsigned char* output_image, unsigned char* dev_input, unsigned char* dev_output, int width, int height)
+void getOutputFilter(unsigned char* &output_image, unsigned char* &dev_input, unsigned char* &dev_output, int width, int height)
 {
-    cudaDeviceSynchronize();
     getError(cudaMemcpy(output_image, dev_output, width*height*3*sizeof(unsigned char), cudaMemcpyDeviceToHost ));
 
     getError(cudaFree(dev_input));
