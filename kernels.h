@@ -15,7 +15,7 @@ struct ParametersToFilter
 {
     preparedImage *images;
     int img_id;
-}
+};
 
 void *
 filter(void *arg);
