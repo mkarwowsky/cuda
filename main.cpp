@@ -25,7 +25,7 @@ preparedImage loadImage(const char* name_file){
     image.input_image = new unsigned char[(image.in_image.size()*3)/4];
     image.output_image = new unsigned char[(image.in_image.size()*3)/4];
     int where = 0;
-    for(int i = 0; i < in_image.size(); ++i) {
+    for(int i = 0; i < image.in_image.size(); ++i) {
        if((i+1) % 4 != 0) {
            image.input_image[where] = image.in_image.at(i);
            image.output_image[where] = 255;
