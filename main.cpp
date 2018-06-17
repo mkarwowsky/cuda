@@ -35,15 +35,6 @@ preparedImage loadImage(const char* name_file){
     return image;
 }
 
-void runFilter(preparedImage loadedImage){
-    unsigned char* dev_input;
-    unsigned char* dev_output;
-
-    filter(loadedImage.input_image, loadedImage.output_image, loadedImage.width, loadedImage.height, dev_input, dev_output);
-    std::cout << "dupa debugging" << std::endl;
-
-    getOutputFilter(loadedImage.output_image, dev_input, dev_output, loadedImage.width, loadedImage.height);
-}
 
 
 int main(int argc, char** argv) {
@@ -85,7 +76,13 @@ int main(int argc, char** argv) {
 */
     // Run the filter on it
     printf("Filter uruchom \n");
-    runFilter(loadedImage);
+    unsigned char* dev_input;
+    unsigned char* dev_output;
+
+    filter(loadedImage.input_image, loadedImage.output_image, loadedImage.width, loadedImage.height, dev_input, dev_output);
+    std::cout << "TEST TEST TEST" << std::endl;
+
+    getOutputFilter(loadedImage.output_image, dev_input, dev_output, loadedImage.width, loadedImage.height);
     //filter(loadedImage.input_image, loadedImage.output_image, loadedImage.width, loadedImage.height); 
 
     // Prepare data for output
