@@ -50,7 +50,8 @@ int main(int argc, char** argv) {
     const char* output_file = argv[2+j];
 
     unsigned char* input_image, unsigned char* output_image
-    preparedImage loadedImage = loadImage(input_file);
+    preparedImage loadedImage;
+    loadedImage = loadImage(input_file);
 /*    printf("Czytanie argumentów: %s %s \n", argv[1+j], argv[2+j]);
     std::vector<unsigned char> in_image;
     unsigned int width, height;
