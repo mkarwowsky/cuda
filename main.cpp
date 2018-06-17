@@ -49,7 +49,7 @@ int main(int argc, char **argv)
         // Read the arguments
         printf("Czytanie argumentów: %s %s \n", argv[1 + j], argv[2 + j]);
         const char *input_file = argv[1 + j];
-        const char *output_file = argv[2 + j];
+        
 
         images[j / 2] = loadImage(input_file);
         params[j / 2].images = images;
@@ -65,6 +65,7 @@ int main(int argc, char **argv)
     printf("Joining threads \n");
     for (int j = 0; j < argc; j += 2)
     {
+        const char *output_file = argv[2 + j];
         if (pthread_join(threads[j / 2], NULL))
         {
             fprintf(stderr, "Error joining threadn");
