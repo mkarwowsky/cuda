@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     ParametersToFilter *params = new ParametersToFilter[argc / 2]; // parametry do filtrów
     pthread_t *threads = new pthread_t[argc / 2];                  // uchwyty na wątki
 
-    for (int j = 0; j < argc; j += 2)
+    for (int j = 0; j < argc-2; j += 2)
     {
         printf("Argc = %d", argc);
         // Read the arguments
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
         }
     }
     printf("Joining threads \n");
-    for (int j = 0; j < argc; j += 2)
+    for (int j = 0; j < argc-2; j += 2)
     {
         const char *output_file = argv[2 + j];
         if (pthread_join(threads[j / 2], NULL))
