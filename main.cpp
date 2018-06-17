@@ -10,24 +10,24 @@ struct preparedImage {
     unsigned char* input_image;
     unsigned char* output_image;
     unsigned int width, height;
+    std::vector<unsigned char> in_image;;
 };
 
 preparedImage loadImage(const char* name_file){
-    std::vector<unsigned char> in_image;
     preparedImage image;
     // Load the data
     printf("Ładowanie danych \n");
-    unsigned error = lodepng::decode(in_image, image.width, image.height, name_file);
+    unsigned error = lodepng::decode(image.in_image, image.width, image.height, name_file);
     if(error) std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
     
     // Prepare the data
     printf("Przygotowanie danych \n");
-    image.input_image = new unsigned char[(in_image.size()*3)/4];
-    image.output_image = new unsigned char[(in_image.size()*3)/4];
+    image.input_image = new unsigned char[(image.in_image.size()*3)/4];
+    image.output_image = new unsigned char[(image.in_image.size()*3)/4];
     int where = 0;
     for(int i = 0; i < in_image.size(); ++i) {
        if((i+1) % 4 != 0) {
-           image.input_image[where] = in_image.at(i);
+           image.input_image[where] = image.in_image.at(i);
            image.output_image[where] = 255;
            where++;
        }
@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
     // Prepare data for output
     printf("Dane na output \n");
     std::vector<unsigned char> out_image;
-    for(int i = 0; i < in_image.size(); ++i) {
+    for(int i = 0; i < image.in_image.size(); ++i) {
         out_image.push_back(loadedImage.output_image[i]);
         if((i+1) % 3 == 0) {
             out_image.push_back(255);
