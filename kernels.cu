@@ -36,7 +36,7 @@ void blur(unsigned char* input_image, unsigned char* output_image, int width, in
 }
 
 
-void filter (unsigned char* input_image, unsigned char* &output_image, int width, int height, unsigned char* &dev_input, unsigned char* &dev_output ) {
+void filter (unsigned char* &input_image, unsigned char* &output_image, int width, int height, unsigned char* &dev_input, unsigned char* &dev_output ) {
     getError(cudaMalloc( (void**) &dev_input, width*height*3*sizeof(unsigned char)));
     getError(cudaMemcpy( dev_input, input_image, width*height*3*sizeof(unsigned char), cudaMemcpyHostToDevice ));
  
