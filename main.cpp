@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
     filter(loadedImage.input_image, loadedImage.output_image, loadedImage.width, loadedImage.height, dev_input, dev_output);
     std::cout << "TEST TEST TEST" << std::endl;
 
-    getOutputFilter(loadedImage.output_image, dev_input, dev_output, loadedImage.width, loadedImage.height);
+    //getOutputFilter(loadedImage.output_image, dev_input, dev_output, loadedImage.width, loadedImage.height);
     //filter(loadedImage.input_image, loadedImage.output_image, loadedImage.width, loadedImage.height); 
 
     // Prepare data for output
