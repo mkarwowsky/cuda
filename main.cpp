@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
     // Prepare data for output
     printf("Dane na output \n");
     std::vector<unsigned char> out_image;
-    for(int i = 0; i < image.in_image.size(); ++i) {
+    for(int i = 0; i < loadedImage.in_image.size(); ++i) {
         out_image.push_back(loadedImage.output_image[i]);
         if((i+1) % 3 == 0) {
             out_image.push_back(255);
