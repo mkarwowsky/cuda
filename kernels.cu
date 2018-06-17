@@ -10,7 +10,6 @@ void blur(unsigned char* input_image, unsigned char* output_image, int width, in
     const unsigned int offset = blockIdx.x*blockDim.x + threadIdx.x;// numer pixela
     int x = offset % width;
     int y = offset/width;
-    int chunk_size_per_thread;
     int fsize = 32; // Filter size
 
     if(offset < width*height) {
@@ -39,7 +38,7 @@ void blur(unsigned char* input_image, unsigned char* output_image, int width, in
 
 void filter (unsigned char* input_image, unsigned char* output_image, int width, int height, unsigned char* dev_input, unsigned char* dev_output ) {
 
-//    unsigned char* dev_input;
+//   unsigned char* dev_input;
 //   unsigned char* dev_output;
     getError(cudaMalloc( (void**) &dev_input, width*height*3*sizeof(unsigned char)));
     getError(cudaMemcpy( dev_input, input_image, width*height*3*sizeof(unsigned char), cudaMemcpyHostToDevice ));
@@ -60,8 +59,6 @@ void filter (unsigned char* input_image, unsigned char* output_image, int width,
 
 void getOutputFilter(unsigned char* output_image, unsigned char* dev_input, unsigned char* dev_output, int width, int height)
 {
-    dim3 blockDims(512,1,1);
-    dim3 gridDims((unsigned int) ceil((double)(width*height*3/blockDims.x)), 1, 1 );
     getError(cudaMemcpy(output_image, dev_output, width*height*3*sizeof(unsigned char), cudaMemcpyDeviceToHost ));
 
     getError(cudaFree(dev_input));

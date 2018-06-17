@@ -40,7 +40,7 @@ void runFilter(preparedImage loadedImage){
     unsigned char* dev_output;
 
     filter(loadedImage.input_image, loadedImage.output_image, loadedImage.width, loadedImage.height, dev_input, dev_output);
-    std::cout << "dupa debugging" << endl;
+    std::cout << "dupa debugging" << std::endl;
 
     getOutputFilter(loadedImage.output_image, dev_input, dev_output, loadedImage.width, loadedImage.height);
 }
