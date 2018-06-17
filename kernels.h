@@ -7,7 +7,8 @@ struct preparedImage
 {
     unsigned char *input_image;
     unsigned char *output_image;
-    unsigned int width, height;
+    unsigned int width; 
+    unsigned int height;
     std::vector<unsigned char> in_image;
 };
 
