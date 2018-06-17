@@ -42,6 +42,8 @@ int main(int argc, char** argv) {
         std::cout << "Run with input and output image filenames." << std::endl;
         return 0;
     }*/
+    char **global_inputs = new char *[argc/2]; // Co drugi wczytuję.
+    char **global_outputs = new char *[argc/2];
 
     for(int j = 0; j < argc; j+=2){
 
@@ -52,6 +54,9 @@ int main(int argc, char** argv) {
 
     preparedImage loadedImage;
     loadedImage = loadImage(input_file);
+    global_inputs[j/2] = loadedImage.input_image;
+    global_outputs[j/2] = loadedImage.output_image;
+
 /*    printf("Czytanie argumentów: %s %s \n", argv[1+j], argv[2+j]);
     std::vector<unsigned char> in_image;
     unsigned int width, height;
@@ -82,7 +87,7 @@ int main(int argc, char** argv) {
     filter(loadedImage.input_image, loadedImage.output_image, loadedImage.width, loadedImage.height, dev_input, dev_output);
     std::cout << "TEST TEST TEST" << std::endl;
 
-    getOutputFilter(loadedImage.output_image, dev_input, dev_output, loadedImage.width, loadedImage.height);
+    //getOutputFilter(loadedImage.output_image, dev_input, dev_output, loadedImage.width, loadedImage.height);
     //filter(loadedImage.input_image, loadedImage.output_image, loadedImage.width, loadedImage.height); 
 
     // Prepare data for output
