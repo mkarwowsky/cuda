@@ -5,7 +5,7 @@
 #include <cuda_runtime.h>
 #include "kernels.h"
 #include <functional>
-#include pthread.h
+#include <pthread.h>
 
 preparedImage loadImage(const char *name_file)
 {
