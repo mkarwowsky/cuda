@@ -9,20 +9,19 @@
 struct preparedImage {
     unsigned char* input_image;
     unsigned char* output_image;
+    unsigned int width, height;
 };
 
 preparedImage loadImage(const char* name_file){
     std::vector<unsigned char> in_image;
-    unsigned int width, height;
-
+    preparedImage image;
     // Load the data
     printf("Ładowanie danych \n");
-    unsigned error = lodepng::decode(in_image, width, height, name_file);
+    unsigned error = lodepng::decode(in_image, image.width, image.height, name_file);
     if(error) std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
     
     // Prepare the data
     printf("Przygotowanie danych \n");
-    preparedImage image;
     image.input_image = new unsigned char[(in_image.size()*3)/4];
     image.output_image = new unsigned char[(in_image.size()*3)/4];
     int where = 0;
@@ -75,7 +74,7 @@ int main(int argc, char** argv) {
 */
     // Run the filter on it
     printf("Filter uruchom \n");
-    filter(loadedImage.input_image, loadedImage.output_image, width, height); 
+    filter(loadedImage.input_image, loadedImage.output_image, loadedImage.width, loadedImage.height); 
 
     // Prepare data for output
     printf("Dane na output \n");
@@ -89,7 +88,7 @@ int main(int argc, char** argv) {
     
     // Output the data
     printf("Output data \n");
-    error = lodepng::encode(output_file, out_image, width, height);
+    error = lodepng::encode(output_file, out_image, loadedImage.width, loadedImage.height);
     
     //if there's an error, display it
     if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
