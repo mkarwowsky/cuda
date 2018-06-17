@@ -11,7 +11,7 @@ struct preparedImage {
     unsigned char* output_image;
 };
 
-preparedImage loadImage(char* name_file){
+preparedImage loadImage(const char* name_file){
     std::vector<unsigned char> in_image;
     unsigned int width, height;
 
