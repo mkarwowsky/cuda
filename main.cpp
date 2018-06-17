@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
     
     // Output the data
     printf("Output data \n");
-    error = lodepng::encode(output_file, out_image, loadedImage.width, loadedImage.height);
+    unsigned error = lodepng::encode(output_file, out_image, loadedImage.width, loadedImage.height);
     
     //if there's an error, display it
     if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
