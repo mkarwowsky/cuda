@@ -9,7 +9,7 @@
 struct preparedImage {
     unsigned char* input_image;
     unsigned char* output_image;
-}
+};
 
 preparedImage loadImage(char name_file){
     printf("Czytanie argumentów: %s %s \n", argv[1+j], argv[2+j]);
