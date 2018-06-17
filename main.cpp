@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
         // Run the filter on it
         printf("Filter %d uruchom \n", j / 2);
-        if (pthread_create(&threads[j/2], NULL, filter, &(params[j/2])) {
+        if (pthread_create(&threads[j/2], NULL, filter, &(params[j/2]))) {
             fprintf(stderr, "Error creating threadn");
             return 1;
         }
