@@ -9,7 +9,7 @@ struct preparedImage
     unsigned char *output_image;
     unsigned int width; 
     unsigned int height;
-    std::vector<unsigned char> in_image;
+    int in_image;
 };
 
 struct ParametersToFilter
