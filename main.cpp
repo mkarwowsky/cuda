@@ -11,7 +11,7 @@ preparedImage loadImage(const char *name_file)
 {
     preparedImage image;
     std::vector<unsigned char> in_image;
-    int image.size = in_image.size();
+    image.size = in_image.size();
     // Load the data
     printf("Ładowanie danych \n");
     unsigned error = lodepng::decode(in_image, image.width, image.height, name_file);
