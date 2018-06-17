@@ -11,6 +11,7 @@ preparedImage loadImage(const char *name_file)
 {
     preparedImage image;
     std::vector<unsigned char> in_image;
+    int image.size = in_image.size();
     // Load the data
     printf("Ładowanie danych \n");
     unsigned error = lodepng::decode(in_image, image.width, image.height, name_file);
@@ -21,7 +22,6 @@ preparedImage loadImage(const char *name_file)
     printf("Przygotowanie danych \n");
     image.input_image = new unsigned char[(in_image.size() * 3) / 4];
     image.output_image = new unsigned char[(in_image.size() * 3) / 4];
-    image.size = in_image.size();
     int where = 0;
     for (int i = 0; i < in_image.size(); ++i)
     {
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 
         // Run the filter on it
         printf("Filter %d uruchom \n", j / 2);
-        if (pthread_create(&threads[j/2], NULL, filter, &(params[j/2]))) {
+        if (pthread_create(&threads[j/2], NULL, filter, &(params[j/2])) {
             fprintf(stderr, "Error creating threadn");
             return 1;
         }
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
         printf("Dane na output \n");
         std::vector<unsigned char> out_image;
-        for (int i = 0; i < images[j / 2].size.size(); ++i)
+        for (int i = 0; i < images[j / 2].in_image.size(); ++i)
         {
             out_image.push_back(images[j / 2].output_image[i]);
             if ((i + 1) % 3 == 0)
