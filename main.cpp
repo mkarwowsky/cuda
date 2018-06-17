@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 
         printf("Dane na output \n");
         std::vector<unsigned char> out_image;
-        for (int i = 0; i < images[j / 2].size.size(); ++i)
+        for (int i = 0; i < images[j / 2].size; ++i)
         {
             out_image.push_back(images[j / 2].output_image[i]);
             if ((i + 1) % 3 == 0)
