@@ -93,8 +93,8 @@ int main(int argc, char** argv) {
     //if there's an error, display it
     if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
 
-    delete[] input_image;
-    delete[] output_image;
+    delete[] loadedImage.input_image;
+    delete[] loadedImage.output_image;
     }
     return 0;
     
