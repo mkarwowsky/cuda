@@ -10,22 +10,23 @@
 preparedImage loadImage(const char *name_file)
 {
     preparedImage image;
+    std::vector<unsigned char> in_image;
     // Load the data
     printf("Ładowanie danych \n");
-    unsigned error = lodepng::decode(image.in_image, image.width, image.height, name_file);
+    unsigned error = lodepng::decode(in_image, image.width, image.height, name_file);
     if (error)
         std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
 
     // Prepare the data
     printf("Przygotowanie danych \n");
-    image.input_image = new unsigned char[(image.in_image.size() * 3) / 4];
-    image.output_image = new unsigned char[(image.in_image.size() * 3) / 4];
+    image.input_image = new unsigned char[(in_image.size() * 3) / 4];
+    image.output_image = new unsigned char[(in_image.size() * 3) / 4];
     int where = 0;
-    for (int i = 0; i < image.in_image.size(); ++i)
+    for (int i = 0; i < in_image.size(); ++i)
     {
         if ((i + 1) % 4 != 0)
         {
-            image.input_image[where] = image.in_image.at(i);
+            image.input_image[where] = in_image.at(i);
             image.output_image[where] = 255;
             where++;
         }
