@@ -12,7 +12,6 @@ struct preparedImage {
 };
 
 preparedImage loadImage(char name_file){
-    printf("Czytanie argumentów: %s %s \n", argv[1+j], argv[2+j]);
     std::vector<unsigned char> in_image;
     unsigned int width, height;
 
@@ -46,6 +45,7 @@ int main(int argc, char** argv) {
     for(int j = 0; j < argc; j+=2){
 
     // Read the arguments
+    printf("Czytanie argumentów: %s %s \n", argv[1+j], argv[2+j]);
     const char* input_file = argv[1+j];
     const char* output_file = argv[2+j];
 
